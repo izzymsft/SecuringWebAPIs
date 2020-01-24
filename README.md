@@ -1,5 +1,5 @@
 
-## Securing Web APIs with Azure Application Gateway V2 WAF and API Management
+### Securing Web APIs with Azure Application Gateway V2 WAF and API Management
 
 This document contains guidelines on how to secure your Web Applications and APIs using Azure Application Gateway and API Management
 
