@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subscriptionId": {
+            "value": "86d61f02-2fcf-4a37-bb6e-cc2c2db9f67d",
+            "metadata": {
+                "description": "Subscription Id"
+            }
+        },
+        "appGatewayResourceGroup": {
+            "value": "SecureDemo",
+            "metadata": {
+                "description": "The Resource Group Name"
+            }
+        },
+        "appGatewayInstanceName": {
+            "value": "orlando",
+            "metadata": {
+                "description": "The App GW Instance Name"
+            }
+        },
+        "appGatewayVirtualNetworkName": {
+            "value": "DemoVNet",
+            "metadata": {
+                "description": "Virtual Network Name"
+            }
+        },
+        "appGatewayPublicIpName": {
+            "value": "orlandoPublicIp",
+            "metadata": {
+                "description": "Subscription Id"
+            }
+        }
+    }
+}
