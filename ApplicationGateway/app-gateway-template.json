@@ -11,7 +11,7 @@
         },
         "subscriptionId": {
             "defaultValue": "[subscription().id]",
-            "type": "String",
+            "type": "SecureString",
             "metadata": {
                 "description": "Subscription Id (Hexadecimal format)"
             }
@@ -65,6 +65,20 @@
                 "description": "Public FQDN for the Portal at the App Gateway Layer"
             }
         },
+        "apiFQDN": {
+            "type": "String",
+            "defaultValue" : "gateway.izzyacademy.com",
+            "metadata": {
+                "description": "FQDN For Internal APIs at APIM Backend Layer"
+            }
+        },
+        "portalFQDN": {
+            "type": "String",
+             "defaultValue" : "portal-legacy.izzyacademy.com",
+            "metadata": {
+                "description": "FQDN For Portal at APIM Backend Layer"
+            }
+        },
         "apiBackendPool": {
             "defaultValue": "api-backend-pool",
             "type": "String",
@@ -115,20 +129,6 @@
             "type": "String" ,
             "metadata": {
                 "description": "HTTP Setting Name for Portal"
-            }
-        },
-        "apiFQDN": {
-            "type": "String",
-            "defaultValue" : "gateway.izzyacademy.com",
-            "metadata": {
-                "description": "FQDN For Internal APIs at APIM Layer"
-            }
-        },
-        "portalFQDN": {
-            "type": "String",
-             "defaultValue" : "portal-legacy.izzyacademy.com",
-            "metadata": {
-                "description": "FQDN For Portal at APIM Layer"
             }
         },
         "apiCertname": {
@@ -185,14 +185,32 @@
     "variables": {
         "resourceGroupPrefix" : "[concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/', parameters('appGatewayResourceGroup'))]",
         "appGatewayVNet" : "[concat(variables('resourceGroupPrefix'), '/providers/Microsoft.Network/virtualNetworks/', parameters('appGatewayVirtualNetworkName'))]",
-        "appGatewaySubnet" : "[concat(variables('appGatewayVNet'), '/', parameters('appGatewaySubnetName'))]",
+        "appGatewaySubnet" : "[concat(variables('appGatewayVNet'), '/subnets/', parameters('appGatewaySubnetName'))]",
         "appGatewayPublicIp" : "[concat(variables('resourceGroupPrefix'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('appGatewayPublicIpName'))]"
     },
     "resources": [
         {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2019-11-01",
+            "name": "[parameters('appGatewayPublicIpName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
             "type": "Microsoft.Network/applicationGateways",
             "apiVersion": "2019-11-01",
             "name": "[parameters('appGatewayInstanceName')]",
+            "dependsOn": [
+                "[variables('appGatewayPublicIp')]"
+            ],
             "location": "[parameters('location')]",
             "properties": {
                 "sku": {
